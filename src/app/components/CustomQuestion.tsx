@@ -32,10 +32,6 @@ export const CustomQuestion = ({ handleSetQuestion, setQuestion, question, handl
         color="black"
         fontWeight="medium"
         borderRadius="lg"
-        _hover={{
-          bg: 'transparent',
-          color: 'white',
-        }}
         _focus={{
           outline: 'none',
           ring: 2,

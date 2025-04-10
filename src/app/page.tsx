@@ -7,6 +7,7 @@ import { SuggestedQuestions } from './components/SuggestedQuestions';
 import { LabelMessage } from './components/LabelMessage';
 import { CustomQuestion } from './components/CustomQuestion';
 import { AIResponse } from './components/AIResponse';
+import { toaster, Toaster } from '@/components/ui/toaster';
 
 export default function Home() {
   const [question, setQuestion] = useState<string>('');
@@ -16,27 +17,45 @@ export default function Home() {
 
   const handleSetQuestion = async (text: string) => {
     try {
+      if (!text) {
+        return toaster.create({
+          description: 'You need to write something!',
+          type: 'error',
+        });
+      }
       setIsLoading(true);
       const fetchAIResponse = await askAI(text);
       setAiResponse(fetchAIResponse);
       setIsLoading(false);
       setOpen(false);
-    } catch (error) {
+    } catch {
       setIsLoading(false);
-      console.log(error);
+      return toaster.create({
+        description: 'Something went wrong with the server!',
+        type: 'error',
+      });
     }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      if (!question) {
+        return toaster.create({
+          description: 'You need to write something!',
+          type: 'error',
+        });
+      }
       setIsLoading(true);
       const fetchAIResponse = await askAI(question);
       setAiResponse(fetchAIResponse);
       setIsLoading(false);
-    } catch (error) {
+    } catch {
       setIsLoading(false);
-      console.log(error);
+      return toaster.create({
+        description: 'Something went wrong with the server!',
+        type: 'error',
+      });
     }
   };
 
@@ -58,6 +77,7 @@ export default function Home() {
         setQuestion={setQuestion}
       />
       <AIResponse aiResponse={aiResponse} isLoading={isLoading} />
+      <Toaster />
     </div>
   );
 }
